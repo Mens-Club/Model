@@ -32,4 +32,4 @@ def main():
     # 총 6만개 가량 수집
 
 if __name__ == "__main__":
-    main() 
+    main()  
