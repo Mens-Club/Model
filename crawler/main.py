@@ -63,7 +63,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--output_path",
         type=str,
-        default="../output/denim_pants_data.csv",
+        default="../output/slacks_pants_data.csv",
         help="저장할 CSV 파일 경로를 입력하세요 (예: ../output/denim_pants_data.csv)"
     )
     args = parser.parse_args()
