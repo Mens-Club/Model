@@ -7,7 +7,7 @@ import random
 def recommend_by_filter(season: str, category: str, sub_category: str, filter_json: dict, max_per_category: int = 3) -> dict:
     result = {}
 
-    for cat in ["상의", "하의", "신발"]:
+    for cat in ["아우터","상의", "하의", "신발"]:
         candidates = filter_json.get(season, {}).get(cat, [])
 
         # 본인 착용 아이템 제외
