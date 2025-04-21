@@ -1,4 +1,4 @@
-from get_category import connect_to_db, get_categories
+
 
 total_style_dict = {'캐주얼': '1', '미니멀': '11'}
 top_fit_dict = {'슬림': '2%5E87', '레귤러': '2%5E88', '오버사이즈': '2%5E90'}

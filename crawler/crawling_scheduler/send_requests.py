@@ -2,7 +2,6 @@ import requests
 import time
 import random
 from tqdm import tqdm
-from generate_url import generate_url
 
 season_map = {
     '캔버스/단화': '봄, 여름, 가을, 겨울', 

@@ -43,8 +43,3 @@ def get_categories(db):
     db.close()
 
     return categories
-
-if __name__ == '__main__':
-    db = connect_to_db()
-    categories = get_categories(db)
-    print(categories)
