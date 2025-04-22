@@ -4,20 +4,20 @@ from typing import Optional
 import random
 
 
-def recommend_by_filter(season: str, category: str, sub_category: str, filter_json: dict, max_per_category: int = 3) -> dict:
+def recommend_by_filter(season, category, sub_category, filter_json, max_per_category=3):
     result = {}
 
-    for cat in ["아우터","상의", "하의", "신발"]:
+    for cat in ["상의", "아우터", "하의", "신발"]:
+        # 입력 category와 같으면 skip (본인 제외 목적)
+        if cat == category:
+            continue
+        if season == "여름" and cat == "아우터":
+            continue
+
         candidates = filter_json.get(season, {}).get(cat, [])
 
-        # 본인 착용 아이템 제외
-        if cat == category:
-            filtered = [item for item in candidates if item != sub_category]
-        else:
-            filtered = candidates
-
-        # 랜덤 셔플 후 상위 N개 추출
-        shuffled = filtered[:]
+        # 추천 후보군 셔플 및 추출
+        shuffled = candidates[:]
         random.shuffle(shuffled)
         result[cat] = shuffled[:max_per_category]
 

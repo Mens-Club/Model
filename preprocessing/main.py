@@ -6,14 +6,14 @@ def main():
     # 옷 쿼리
     query_clothing = """
     SELECT season, main_category, sub_category, color, thumbnail_url
-    FROM menstable
+    FROM menstable_test2
     WHERE season IS NOT NULL AND main_category IS NOT NULL AND sub_category IS NOT NULL AND color IS NOT NULL AND thumbnail_url IS NOT NULL
     """
 
     # 신발 쿼리
     query_shoes = """
     SELECT season, sub_category, color, thumbnail_url
-    FROM shoes_test
+    FROM shoes
     """
     
     with open("../data/season_filter_combined.json", encoding="utf-8") as f:

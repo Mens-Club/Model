@@ -8,6 +8,10 @@ __pycache__/
 .env
 crawler/config
 output/
+images/
+
+data/instruction_data_menstable.json
+data/instruction_parquet.parquet
 
 # Distribution / packaging
 .Python
