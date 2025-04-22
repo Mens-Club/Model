@@ -11,3 +11,4 @@ shoes = get_season_category_map(
     fixed_category="신발",
     save_path="../data/season_category_filter_shoes.json"
 )
+ 
