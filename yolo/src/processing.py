@@ -19,12 +19,12 @@ def process_image(image_path, model, sam, cloth_cls, shoe_cls, output_folder, co
     proc = preprocess(img_np)
 
     # 2) YOLO TTA 예측: shoes → clothing
-    target = 'shoes'
-    res = model.predict(source=proc, conf=conf, classes=[shoe_cls], augment=augment)
+    target = 'clothing'
+    res = model.predict(source=proc, conf=conf, classes=[cloth_cls], augment=augment)
     xyxy = res[0].boxes.xyxy.cpu().numpy()
     if len(xyxy) == 0:
-        target = 'clothing'
-        res = model.predict(source=proc, conf=conf, classes=[cloth_cls], augment=augment)
+        target = 'shoes'
+        res = model.predict(source=proc, conf=conf, classes=[shoe_cls], augment=augment)
         xyxy = res[0].boxes.xyxy.cpu().numpy()
 
     if len(xyxy) == 0:
