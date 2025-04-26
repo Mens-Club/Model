@@ -1,16 +1,20 @@
-import pymysql 
+import pymysql
 from dotenv import load_dotenv
 import os 
-import polars as pl
-import pandas as pd
-
+import pandas as pd 
 
 load_dotenv()
 
 
-def fetch_data_as_polars(query: str):
-        
-    # db 연결    
+def fetch_data_as_pandas(query: str) -> pd.DataFrame:
+    """_summary_
+
+    Args:
+        query (str): SQL Query
+
+    Returns:
+        pd.DataFrame: df resturns 
+    """
     conn = pymysql.connect(
     
     host=os.getenv("MYSQL_HOST"),       
@@ -31,7 +35,6 @@ def fetch_data_as_polars(query: str):
         result = cursor.fetchall()
 
     df = pd.DataFrame(result)
-    pls = pl.from_pandas(df)
     
-    return pls
+    return df
     

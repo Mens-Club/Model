@@ -10,8 +10,8 @@ crawler/config
 output/
 images/
 
-data/instruction_data_menstable.json
-data/instruction_parquet.parquet
+data/json/instruction_data_menstable.json
+data/parquet/instruction_parquet.parquet
 
 # Distribution / packaging
 .Python
