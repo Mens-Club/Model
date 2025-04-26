@@ -9,7 +9,7 @@ def push_to_db(db, shoes_results, other_results):
 
     # 데이터 삽입 쿼리 준비
     insert_query = """
-    INSERT INTO menstable_test2 (
+    INSERT INTO menstable_test (
         style, season, fit, color, goods_name, thumbnail_url,
         is_soldout, goods_url, brand, normal_price, price,
         main_category, sub_category
@@ -41,7 +41,7 @@ def push_to_db(db, shoes_results, other_results):
     db.commit()
 
     insert_query = """
-    INSERT INTO shoes_test2 (
+    INSERT INTO shoes_test (
         color, sub_category, season, goods_name, thumbnail_url, is_soldout, goods_url, brand, normal_price, price
     ) VALUES (
         %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
