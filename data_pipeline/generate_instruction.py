@@ -15,13 +15,13 @@ load_dotenv()
 
 # 옷 쿼리
 query_clothing = """
-SELECT season, main_category, sub_category, color, s3_path
+SELECT season, main_category, sub_category, color, thumbnail_url, s3_path
 FROM mens_table_refine;
 """
 
 # 신발 쿼리
 query_shoes = """
-SELECT season, sub_category, color, s3_path
+SELECT season, sub_category, color, thumbnail_url, s3_path
 FROM shoes_refine;
 """
     
@@ -54,10 +54,6 @@ def main():
     print(f"총 {len(all_data)}개 데이터 저장 완료")
     
     
-    
-    
-
-
 if __name__ == "__main__":
 
     

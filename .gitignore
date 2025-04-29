@@ -15,6 +15,11 @@ images/
 data/json/instruction_data_menstable.json
 data/parquet/instruction_parquet.parquet
 
+data_pipeline/fashion_dataset_full/
+data_pipeline/fashion_dataset_part_*/
+data_pipeline/fashion_dataset_full.zip
+
+
 # Distribution / packaging
 .Python
 build/
