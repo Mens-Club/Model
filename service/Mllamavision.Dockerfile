@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir \
     accelerate \
     pillow \
     python-multipart \
-    requests \
+    requests \ 
     huggingface-hub \
     runpod
 
