@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir \
     huggingface-hub \
     runpod
 
-# 서버 코드 복사
+# 서버 코드 복사 
 COPY ./main.py /app/
 
 # 모델 캐싱을 위한 환경변수 설정
