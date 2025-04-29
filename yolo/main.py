@@ -1,6 +1,8 @@
 import os
 from src.models import load_yolo_model, download_sam_checkpoint, load_sam_model
 from src.processing import process_image
+import urllib.request
+import pymysql
 
 INPUT_FOLDER = './thumbnail_images'
 OUTPUT_FOLDER = './result'
@@ -20,4 +22,23 @@ def main():
     print("모든 이미지 처리 완료!")
 
 if __name__ == "__main__":
+    # DB 연결 및 데이터 가져오기 (기존 코드 유지)
+    db = pymysql.connect(host='172.16.221.208', port=3300, user='HYEONG', passwd='1234', db='mensclub', use_unicode=True)
+    cursor = db.cursor()
+    query = "SELECT thumbnail_url FROM shoes_test LIMIT 20"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+
+    input_folder = './thumbnail_images'
+    output_folder = './result'
+
+    for idx, row in enumerate(rows):
+        thumbnail_url = row[0]
+        print(f"→ URL: {thumbnail_url}")
+        image_path = os.path.join(input_folder, f'thumbnail_{idx + 1}.jpg')
+        urllib.request.urlretrieve(thumbnail_url, image_path)
+
+    cursor.close()
+    db.close()
+
     main()
