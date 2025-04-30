@@ -1,9 +1,9 @@
 
 services:
   PGVector:
-    image: pgvector/pgvector:pg15
+    image: pgvector/pgvector:pg17
 
-    container_name: Vector_db
+    container_name: MensCLUB-PGVec
 
     restart: always
     environment:
@@ -16,4 +16,4 @@ services:
       - pgdata:/var/lib/postgresql/data\
 
 volumes:
-  pgdata:
+  pgdata: 
