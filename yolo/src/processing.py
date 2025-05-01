@@ -8,7 +8,7 @@ from segment_anything import SamPredictor
 def preprocess(img_np):
     blur = cv2.GaussianBlur(img_np, (5,5), 1.5)
     lab = cv2.cvtColor(blur, cv2.COLOR_RGB2LAB)
-    lab[:,:,0] = cv2.equalizeHist(lab[:,:,0])
+    lab[:,:,0] = cv2.equalizeHist(lab[:,:,0]) 
     return cv2.cvtColor(lab, cv2.COLOR_LAB2RGB)
 
 def process_image(image_path, model, sam, cloth_cls, shoe_cls, output_folder, conf, augment):
