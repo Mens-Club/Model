@@ -1,21 +1,31 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import json
 import random
+from src.call import get_fashion_recommendation
 from src.answer import split_answer_recommend
 from src.filter import filter_items, generate_outfit_combinations
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 app = FastAPI()
 
 class OutfitRequest(BaseModel):
     image_id: str
 
+api_id = os.getenv("RUNPOD_API_ID")
+api_key = os.getenv("RUNPOD_API_KEY")
+
 @app.post("/generate-outfit")
 def generate_outfit(request: OutfitRequest):
-    # 하드코딩된 테스트 텍스트
-    test_text = '{"answer": "이 상품은 데님 팬츠로 보이며 해당 상품은 겨울에 맞는 상품입니다. 그에 맞는 상품들을 추천드릴게요.", "recommend": {"상의": ["긴소매 티셔츠", "셔츠&블라우스 - 긴소매", "긴소매 티셔츠"], "아우터": ["롱패딩&헤비 아우터", "겨울 싱글 코트", "무스탕&퍼"], "하의": [], "신발": ["모카신", "패션스니커즈화", "캔버스/단화"]}}'
+    try:
+        rp = get_fashion_recommendation(request.image_id, api_id, api_key)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"RunPod 호출 오류: {e}")
+    
     # answer.py로 텍스트 파싱
-    result = split_answer_recommend(test_text)
+    result = split_answer_recommend(rp)
     answer = result.get("answer", "")
     season = result.get("season", "")
     recommend = result.get("recommend", "{}")
