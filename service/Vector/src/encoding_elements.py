@@ -2,7 +2,6 @@ import clip
 from PIL import Image
 import requests
 import io 
-import numpy as np 
 import torch 
 
 class Encoding:
