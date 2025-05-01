@@ -4,6 +4,7 @@ from src.PGVec_process import PGVecProcess
 import json 
 from botocore.exceptions import ClientError
 import os 
+from tqdm import tqdm
 
 def get_instruction_data(bucket_name, key):
     """S3에서 instruction 데이터를 가져옴"""
@@ -26,8 +27,15 @@ def process_instruction_data(instruction_data, encoder):
     """Instruction 데이터를 처리하고 임베딩을 생성"""
     processed_data = []
     
-    for item in instruction_data:
+    print(f"총 {len(instruction_data)}개 항목 처리 시작...")
+    
+    # tqdm을 사용하여 진행 상황 표시
+    for i, item in enumerate(tqdm(instruction_data)):
         try:
+            # 주기적으로 진행 상황 출력 (예: 100개마다)
+            if i > 0 and i % 100 == 0:
+                print(f"{i}/{len(instruction_data)} 항목 처리 완료")
+                
             # 이미지 URL 가져오기
             image_url = item['input'].get('image', '')
             if not image_url:
@@ -84,8 +92,9 @@ def main():
             print("데이터베이스 연결에 실패했습니다.")
             return
         
+        success_count = 0
         print("데이터베이스 저장중...")
-        for item in processed_data:
+        for item in tqdm(processed_data):
             if db_processor.injection(item, cursor):
                 success_count += 1
         

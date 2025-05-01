@@ -14,7 +14,8 @@ class PGVecProcess:
             "dbname": "mydatabase",
             "user": "myuser",
             "password": "mypassword",
-            "host": "localhost"
+            "host": "localhost",
+            "port" : "5433"
         }
         
         # 데이터베이스 연결 메서드 추가
