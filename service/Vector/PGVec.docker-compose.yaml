@@ -1,0 +1,20 @@
+
+services:
+  PGVector:
+    image: pgvector/pgvector:pg17
+
+    container_name: MensCLUB-PGVec
+
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data\
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
+
+volumes:
+  pgdata: 

@@ -14,12 +14,12 @@ RUN pip install --no-cache-dir \
     accelerate \
     pillow \
     python-multipart \
-    requests \
+    requests \ 
     huggingface-hub \
     runpod
 
 # 서버 코드 복사
-COPY ./main.py /app/
+COPY ./test.py /app/
 
 # 모델 캐싱을 위한 환경변수 설정
 ENV HF_HOME=/app/hf_cache
