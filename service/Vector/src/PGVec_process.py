@@ -140,6 +140,21 @@ class PGVecProcess:
             # 결과 변환
             results = []
             for row in cursor.fetchall():
+                # recommend 필드 안전하게 처리
+                recommend_data = {}
+                if row[7]:
+                    if isinstance(row[7], str):
+                        try:
+                            recommend_data = json.loads(row[7])
+                        except json.JSONDecodeError:
+                            recommend_data = {"error": "잘못된 JSON 형식"}
+                    elif isinstance(row[7], dict):
+                        recommend_data = row[7]  
+                
+                distance = float(row[8])
+                max_distance = 10.0
+                similarity_percentage = max(0, 100 * (1 - distance / max_distance))
+
                 results.append({
                     'source_url': row[0],
                     'embedding': row[1],
@@ -148,12 +163,15 @@ class PGVecProcess:
                     'sub_category': row[4],
                     'color': row[5],
                     'answer': row[6],
-                    'recommend': json.loads(row[7]) if row[7] else {},
-                    'distance': row[8]
+                    'recommend': recommend_data,
+                    'distance': row[8],
+                    'similarity': round(similarity_percentage, 2)
                 })
             
             return results
         
         except Exception as e:
             print(f"유사도 검색 중 오류 발생: {e}")
+            import traceback
+            traceback.print_exc()  # 자세한 오류 추적
             return []

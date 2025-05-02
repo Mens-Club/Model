@@ -5,6 +5,7 @@ import base64
 import time
 from dotenv import load_dotenv
 import os 
+import json 
 
 load_dotenv()
 
@@ -75,7 +76,7 @@ def main(image_path, api_id, api_key, rag_context):
     {{ "answer": ..., "recommend": {{ "상의": [...], "아우터": [...], "하의": [...], "신발": [...] }} }}
 
     *주의*:
-    1) `answer` 문장에 반드시 '봄에 잘 어울리는 스타일입니다'처럼 계절을 언급할 것.
+    1) `answer` 문장에 반드시 '해당 상품은 데님 팬츠로 보이며 봄에 잘 어울리는 스타일입니다'처럼 계절과 아이템 카테고리를 언급할 것.
     2) `recommend` 내 각 카테고리별로 최소 3개의 아이템을 제시할 것.
     3) 이미지에 등장하는 주요 아이템은 해당 카테고리에서 제외하고, 나머지 카테고리는 모두 추천할 것.
     """
@@ -123,18 +124,35 @@ if __name__ == "__main__":
     
     image_url = "https://kr.object.iwinv.kr/web-assets-prod/clothes/3689714.jpg"
     context = similar_distance(image_url=image_url)
+    print(api_key)
+    print(api_id)
 
     # 두 번째 결과의 필요한 필드만 추출
-    filtered_result = {k: context[1][k] for k in ['season', 'sub_category', 'answer']} if len(context) > 1 else {}
-    print(filtered_result)
     
+    # 결과가 비어있지 않고, 최소 1개 이상의 아이템이 있는 경우 처리
+    if context and len(context) > 0:
+        # 첫 번째 결과의 필요한 필드만 추출
+        item = context[0]  # 가장 유사도가 높은 첫 번째 결과 사용
+        
+        # 필요한 필드 추출
+        filtered_result = {
+            "answer" : item.get("answer", ""),
+            "category": item.get("category", ""),
+            "sub_category": item.get("sub_category", ""),
+            "color": item.get("color", ""),
+            "season": item.get("season", ""),
+            "recommend": item.get("recommend", {})
+        }
+        
+        
     result = main(image_path=image_url,
          api_id=api_id,
          api_key=api_key,
          rag_context=filtered_result
-         )["output"]["generated_text"]
+    )
     
-    print(result)
+    refined = result["output"]["generated_text"].split("assistant")[1].strip()
+    print(json.loads(refined))
     
     
     
