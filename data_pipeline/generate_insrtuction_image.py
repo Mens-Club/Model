@@ -2,7 +2,6 @@ import os
 import json
 import shutil
 import requests
-import boto3
 from PIL import Image as PILImage
 from io import BytesIO
 from tqdm import tqdm
@@ -10,35 +9,26 @@ from dotenv import load_dotenv
 from datasets import Dataset, Image, load_from_disk, concatenate_datasets
 from storage.connect_storage import get_client
 
-# Load env
+
 load_dotenv()
 s3_client = get_client()
-bucket = os.getenv("PREPROCESSING_BUCKET")           # 예: model-training-data
+bucket = os.getenv("PREPROCESSING_BUCKET")          
 s3_key = os.getenv("HF_DATASET_ZIP_KEY")             
 
 
-
-# ---------------------
-# STEP 1: 데이터 로드
-# ---------------------
 def download_instruction_json(bucket: str, s3_key: str, local_path: str):
     s3_client.download_file(bucket, s3_key, local_path)
     with open(local_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-
-# ---------------------
-# STEP 2: 이미지 로딩 + 저장 (부분)
-# ---------------------
 def fetch_image(url: str) -> PILImage.Image:
     response = requests.get(url, timeout=5)
     return PILImage.open(BytesIO(response.content)).convert("RGB")
 
-
 def save_dataset_chunk(samples: list, start_idx: int, chunk_size: int):
     images, instructions, seasons, categories, sub_categories, colors, answers, recommends = [], [], [], [], [], [], [], []
 
-    for sample in tqdm(samples, desc=f"📥 이미지 로딩 {start_idx}~{start_idx + len(samples)}"):
+    for sample in tqdm(samples, desc=f"이미지 로딩 {start_idx}~{start_idx + len(samples)}"):
         try:
             image = fetch_image(sample["input"]["image"])
             images.append(image)
@@ -50,7 +40,7 @@ def save_dataset_chunk(samples: list, start_idx: int, chunk_size: int):
             answers.append(sample["output"]["answer"])
             recommends.append(sample["output"]["recommend"])
         except Exception as e:
-            print(f"❌ 실패: {sample['input']['image']} - {e}")
+            print(f"실패: {sample['input']['image']} - {e}")
 
     if len(images) == 0:
         print(f"⚠️ 이미지 없음: {start_idx}")
@@ -72,9 +62,6 @@ def save_dataset_chunk(samples: list, start_idx: int, chunk_size: int):
     print(f"✅ 저장 완료: {save_path}")
 
 
-# ---------------------
-# STEP 3: 전체 분할 저장 루프
-# ---------------------
 def chunked(data, size):
     for i in range(0, len(data), size):
         yield data[i:i + size], i
@@ -84,10 +71,6 @@ def save_all_chunks(samples: list, chunk_size=1000):
     for chunk, idx in chunked(samples, chunk_size):
         save_dataset_chunk(chunk, idx, chunk_size)
 
-
-# ---------------------
-# STEP 4: 전체 합치기
-# ---------------------
 def merge_all_chunks(output_path: str, total: int, chunk_size: int):
     paths = [f"fashion_dataset_part_{i}" for i in range(0, total, chunk_size) if os.path.exists(f"fashion_dataset_part_{i}")]
     datasets = [load_from_disk(path) for path in paths]
@@ -130,7 +113,7 @@ def normalize_recommend_field(r):
         "신발": safe(r.get("신발")),
     }
 
-import shutil
+
 
 def fix_recommend_and_save(part_path):
     ds = load_from_disk(part_path)
@@ -148,12 +131,9 @@ def fix_recommend_and_save(part_path):
     shutil.rmtree(part_path)
     shutil.move(tmp_path, part_path)
 
-    print(f"✅ recommend 정제 완료: {part_path}")
+    print(f"recommend 정제 완료: {part_path}")
 
 
-# -----------------------------
-# 병합 함수
-# -----------------------------
 def merge_all_parts(output_path: str, total: int, chunk_size: int):
     paths = [
         f"fashion_dataset_part_{i}" 
@@ -166,20 +146,16 @@ def merge_all_parts(output_path: str, total: int, chunk_size: int):
     full_dataset.save_to_disk(output_path)
     print(f"🎉 전체 데이터셋 병합 완료: {output_path}")
 
-
-# ---------------------
-# MAIN
-# ---------------------
 def main():
     # 환경변수에서 읽기
-    bucket = os.getenv("PREPROCESSING_BUCKET")  # ex: model-training-data
-    s3_key = os.getenv("TRAIN_JSON")            # ex: train/instruction_dataset.json
+    bucket = os.getenv("PREPROCESSING_BUCKET")  
+    s3_key = os.getenv("TRAIN_JSON")           
     json_local = "instruction_dataset.json"
 
     # 1. JSON 다운로드
     print("🔽 instruction JSON 다운로드 중...")
     samples = download_instruction_json(bucket, s3_key, json_local)
-    print(f"📦 총 샘플 수: {len(samples)}")
+    print(f"총 샘플 수: {len(samples)}")
 
     # 2. 분할 저장
     save_all_chunks(samples, chunk_size=1000)
@@ -189,14 +165,14 @@ def main():
 
 def zip_and_upload(local_dir: str, zip_path: str, bucket: str, s3_key: str):
     shutil.make_archive(zip_path, 'zip', local_dir)
-    print(f"📦 압축 완료: {zip_path}.zip")
+    print(f"압축 완료: {zip_path}.zip")
 
     with open(f"{zip_path}.zip", "rb") as f:
         s3_client.upload_fileobj(f, bucket, s3_key)
-    print(f"🚀 S3 업로드 완료: s3://{bucket}/{s3_key}")
+    print(f"S3 업로드 완료: s3://{bucket}/{s3_key}")
 
 
 if __name__ == "__main__":
     full_path = "fashion_dataset_full"
-    zip_base = "fashion_dataset_full"  # .zip 확장자는 붙이지 마세요!
+    zip_base = "fashion_dataset_full"  
     zip_and_upload(full_path, zip_base, bucket, s3_key)

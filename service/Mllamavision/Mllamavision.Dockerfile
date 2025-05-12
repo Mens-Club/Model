@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir \
     runpod
 
 # 서버 코드 복사
-COPY ./test.py /app/
+COPY ./RAG_main.py /app/
 
 # 모델 캐싱을 위한 환경변수 설정
 ENV HF_HOME=/app/hf_cache
@@ -28,4 +28,4 @@ ENV HF_HOME=/app/hf_cache
 EXPOSE 8000
 
 # 서버 실행
-CMD ["python", "test.py"]
+CMD ["python", "RAG_main.py"]

@@ -47,7 +47,7 @@ def main():
     upload_to_s3(
         data=datasets,       
         bucket_name=os.getenv("PREPROCESSING_BUCKET"),
-        content_type="application/octet-stream",  # Parquet MIME 타입
+        content_type="application/octet-stream", 
         s3_key=os.getenv("TRAIN_PARQUET")
     )
     

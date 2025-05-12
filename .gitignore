@@ -12,6 +12,9 @@ crawler/config
 output/
 images/
 
+
+cheorish-lab-897ce33e2b4f.json
+
 data/json/instruction_data_menstable.json
 data/parquet/instruction_parquet.parquet
 
