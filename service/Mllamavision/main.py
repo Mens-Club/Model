@@ -35,7 +35,7 @@ def handler(event):
     max_tokens = input_data.get("max_tokens", 512)
     
     # 메시지 구성
-    messages = [
+    messages = [ 
         {
             "role": "user",
             "content": [
