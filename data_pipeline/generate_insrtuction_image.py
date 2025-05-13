@@ -11,6 +11,7 @@ from storage.connect_storage import get_client
 
 
 load_dotenv()
+
 s3_client = get_client()
 bucket = os.getenv("PREPROCESSING_BUCKET")          
 s3_key = os.getenv("HF_DATASET_ZIP_KEY")             
@@ -43,7 +44,7 @@ def save_dataset_chunk(samples: list, start_idx: int, chunk_size: int):
             print(f"실패: {sample['input']['image']} - {e}")
 
     if len(images) == 0:
-        print(f"⚠️ 이미지 없음: {start_idx}")
+        print(f" 이미지 없음: {start_idx}")
         return
 
     dataset = Dataset.from_dict({
@@ -59,7 +60,7 @@ def save_dataset_chunk(samples: list, start_idx: int, chunk_size: int):
 
     save_path = f"fashion_dataset_part_{start_idx}"
     dataset.save_to_disk(save_path)
-    print(f"✅ 저장 완료: {save_path}")
+    print(f"저장 완료: {save_path}")
 
 
 def chunked(data, size):
@@ -102,7 +103,6 @@ def fix_recommend_and_save(part_path):
     print(f"✅ recommend 필드 수정 완료: {part_path}")
 
 
-
 def normalize_recommend_field(r):
     def safe(v):
         return v if v and isinstance(v, list) else [""]
@@ -112,8 +112,6 @@ def normalize_recommend_field(r):
         "하의": safe(r.get("하의")),
         "신발": safe(r.get("신발")),
     }
-
-
 
 def fix_recommend_and_save(part_path):
     ds = load_from_disk(part_path)
@@ -153,7 +151,7 @@ def main():
     json_local = "instruction_dataset.json"
 
     # 1. JSON 다운로드
-    print("🔽 instruction JSON 다운로드 중...")
+    print(" instruction JSON 다운로드 중...")
     samples = download_instruction_json(bucket, s3_key, json_local)
     print(f"총 샘플 수: {len(samples)}")
 

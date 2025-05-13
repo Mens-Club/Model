@@ -1,12 +1,9 @@
 import json
 
 def create_llama_vision_example(sample):
-    input_info = sample["input"]
-    output = sample["output"]
     
-    # input_info에서 필요한 변수 추출
-    sub_category = input_info.get("sub_category", "")
-    season = input_info.get("season", "")
+    season = sample["season"]
+    sub_category = sample["sub_category"]
     
     # 1) instruction (text) 에 주의사항을 포함
     instruction = (
@@ -23,10 +20,12 @@ def create_llama_vision_example(sample):
     
     # 2) assistant 응답 (JSON 문자열)
     response_json = {
-        "answer": output["answer"],
-        "recommend": output["recommend"]
+        "answer": sample["answer"],
+        "recommend": sample["recommend"]
     }
+    
     response_str = json.dumps(response_json, ensure_ascii=False)
+    image_data = sample["image"]
     
     # 3) messages 리스트에 text+image 묶어서 반환
     return {
@@ -34,8 +33,8 @@ def create_llama_vision_example(sample):
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": instruction},
-                    {"type": "image", "image": input_info["image"]},
+                    {"type": "text",  "text": instruction},
+                    {"type": "image", "image": image_data},  # base64 or PIL.Image
                 ]
             },
             {
