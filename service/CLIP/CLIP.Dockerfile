@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # 작업 디렉토리 설정 
-WORKDIR /app
+WORKDIR /app 
 
 # 필요한 Python 패키지 설치
 RUN pip install --no-cache-dir \
