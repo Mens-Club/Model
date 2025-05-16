@@ -37,7 +37,7 @@ def handler(event):
     
     # RAG 컨텍스트를 프롬프트에 통합
     full_prompt = f"""
-    다음 참고 가이드라인을 고려하여 answer와 recommend에 있는 내용들을 그대로 출력하세요:
+    다음 참고 가이드라인을 고려하여 이미지를 분석하고 스타일링 조언을 제공해주세요:
 
     {rag_context}
 
