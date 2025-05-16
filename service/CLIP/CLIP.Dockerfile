@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y \
     git wget \
     && rm -rf /var/lib/apt/lists/*
 
-# 작업 디렉토리 설정
+# 작업 디렉토리 설정 
 WORKDIR /app
 
 # 필요한 Python 패키지 설치
