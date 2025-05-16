@@ -12,7 +12,7 @@ WORKDIR /app
 RUN pip install --no-cache-dir \
     openai-clip \
     torch \
-    torchvision \
+    torchvision \ 
     numpy \
     Pillow \
     requests \
