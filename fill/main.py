@@ -7,7 +7,9 @@ def main():
     try:
         with connection.cursor() as cursor:
             process_recommendations(cursor)
+        print("Committing transaction...")
         connection.commit()
+        print("Committed!")
     finally:
         connection.close()
 

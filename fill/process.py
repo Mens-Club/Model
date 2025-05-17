@@ -3,23 +3,24 @@ from utils import extract_clothing_name
 
 def process_recommendations(cursor):
     rows = fetch_recommendations_to_process(cursor)
-
     for row in rows:
         top_id = row['top_id']
         bottom_id = row['bottom_id']
         outer_id = row['outer_id']
         shoes_id = row['shoes_id']
         style = row['style']
-        detail = row['detail']
+        reasoning_text = row['reasoning_text']
         answer = row['answer']
         picked_id = row['picked_id']
 
         clothing_name = extract_clothing_name(answer)
         if not clothing_name:
+            print('clothing_name')
             continue
 
         filled_id = get_random_item_id(cursor, clothing_name)
         if not filled_id:
+            print('filled_id')
             continue
 
         if not top_id:
@@ -39,10 +40,10 @@ def process_recommendations(cursor):
         )
 
         cursor.execute("""
-            INSERT INTO main_recommend (top_id, bottom_id, outer_id, shoes_id, style, total_price, detail)
+            INSERT INTO recommend_main_recommendation (top_id, bottom_id, outer_id, shoes_id, style, total_price, reasoning_text)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
         """, (
-            top_id, bottom_id, outer_id, shoes_id, style, total_price, detail
+            top_id, bottom_id, outer_id, shoes_id, style, total_price, reasoning_text
         ))
 
         # 처리 후 picked의 whether_main 값을 1로 업데이트
