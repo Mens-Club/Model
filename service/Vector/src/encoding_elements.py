@@ -19,7 +19,7 @@ class Encoding:
             self.model.eval()  # 평가 모드로 설정
         except Exception as e:
             raise RuntimeError(f"CLIP 모델 로딩 중 오류 발생: {e}")
-    
+     
     def encode_image(self, image_url):
         
         try:
