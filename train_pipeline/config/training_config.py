@@ -1,5 +1,11 @@
 from unsloth import is_bf16_supported
 from trl import SFTConfig
+import mlflow 
+import os 
+
+os.environ["AWS_ACCESS_KEY_ID"] = os.getenv("AWS_ACCESS_KEY_ID")
+os.environ["AWS_SECRET_ACCESS_KEY"] = os.getenv("AWS_SECRET_ACCESS_KEY")
+os.environ["MLFLOW_S3_ENDPOINT_URL"] = os.getenv("MLFLOW_S3_ENDPOINT_URL")
 
 def get_training_config(output_dir="outputs"):
     return SFTConfig(
@@ -16,7 +22,7 @@ def get_training_config(output_dir="outputs"):
         lr_scheduler_type="linear",
         seed=3407,
         output_dir=output_dir,
-        report_to="none",
+        report_to="mlflow",
         remove_unused_columns=False,
         dataset_text_field="",
         dataset_kwargs={"skip_prepare_dataset": True},
