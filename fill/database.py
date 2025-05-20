@@ -26,17 +26,17 @@ def get_random_item_id(cursor, category_name):
     table_name = "shoes" if category_name in SHOES_CATEGORIES else "clothes"
     
     query = f"""
-        SELECT idx FROM {table_name}
+        SELECT id FROM {table_name}
         WHERE sub_category = %s
     """
     cursor.execute(query, (category_name,))
     results = cursor.fetchall()
-    return random.choice(results)['idx'] if results else None
+    return random.choice(results)['id'] if results else None
 
 def get_price(cursor, item_id):
     if not item_id:
         return 0
-    cursor.execute("SELECT price FROM clothes WHERE idx = %s", (item_id,))
+    cursor.execute("SELECT price FROM clothes WHERE id = %s", (item_id,))
     result = cursor.fetchone()
     return result['price'] if result else 0
 

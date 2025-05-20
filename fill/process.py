@@ -40,8 +40,8 @@ def process_recommendations(cursor):
         )
 
         cursor.execute("""
-            INSERT INTO recommend_main_recommendation (top_id, bottom_id, outer_id, shoes_id, style, total_price, reasoning_text)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO recommend_main_recommendation (top_id, bottom_id, outer_id, shoes_id, style, total_price, reasoning_text, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
         """, (
             top_id, bottom_id, outer_id, shoes_id, style, total_price, reasoning_text
         ))
