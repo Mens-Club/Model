@@ -1,6 +1,8 @@
 from unsloth import FastVisionModel, is_bf16_supported
 from unsloth.trainer import UnslothVisionDataCollator
 from trl import SFTTrainer
+import os 
+
 
 def load_model_and_tokenizer(model_id):
     model, tokenizer = FastVisionModel.from_pretrained(

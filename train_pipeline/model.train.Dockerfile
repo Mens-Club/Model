@@ -17,7 +17,9 @@ RUN pip install --no-cache-dir \
     boto3 \
     datasets \
     trl \
-    unsloth 
+    unsloth \
+    mlflow==2.21.2 \
+    prometheus_client
 
 COPY . /train
 
