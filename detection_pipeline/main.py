@@ -4,7 +4,7 @@ from src.processing import process_image
 import urllib.request
 import pymysql
 
-INPUT_FOLDER = './thumbnail_images'
+INPUT_FOLDER = './thumbnail_images' 
 OUTPUT_FOLDER = './result'
 
 def main():
