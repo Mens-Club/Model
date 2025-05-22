@@ -3,6 +3,5 @@ __pycache__/
 *.pt
 *.safetensors
 .venv/
-.env
 outputs/
 logs/

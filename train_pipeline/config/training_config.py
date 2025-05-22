@@ -2,6 +2,9 @@ from unsloth import is_bf16_supported
 from trl import SFTConfig
 import mlflow 
 import os 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 os.environ["AWS_ACCESS_KEY_ID"] = os.getenv("AWS_ACCESS_KEY_ID")
 os.environ["AWS_SECRET_ACCESS_KEY"] = os.getenv("AWS_SECRET_ACCESS_KEY")

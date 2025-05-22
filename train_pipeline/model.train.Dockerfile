@@ -6,20 +6,22 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /train
 
-RUN pip install --no-cache-dir \
-    transformers \
-    accelerate \
-    pillow \
-    python-multipart \
-    requests \
-    huggingface-hub \
-    runpod \
-    boto3 \
-    datasets \
-    trl \
-    unsloth \
-    mlflow==2.21.2 \
-    prometheus_client
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir --ignore-installed \
+        transformers \
+        accelerate \
+        pillow \
+        python-multipart \
+        requests \
+        huggingface-hub \
+        runpod \
+        boto3 \
+        datasets \
+        trl \
+        unsloth \
+        mlflow \
+        prometheus_client \
+        python-dotenv
 
 COPY . /train
 
