@@ -33,10 +33,10 @@ def process_recommendations(cursor):
             outer_id = filled_id
 
         total_price = (
-            get_price(cursor, top_id) +
-            get_price(cursor, bottom_id) +
-            get_price(cursor, outer_id) +
-            get_price(cursor, shoes_id)
+            get_price(cursor, top_id, False) +
+            get_price(cursor, bottom_id, False) +
+            get_price(cursor, outer_id, False) +
+            get_price(cursor, shoes_id, True)
         )
 
         cursor.execute("""
