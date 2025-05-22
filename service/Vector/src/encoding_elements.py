@@ -3,6 +3,8 @@ from PIL import Image
 import requests
 import io 
 import torch 
+import logging 
+
 
 class Encoding:
     
@@ -38,7 +40,7 @@ class Encoding:
 
             return image_features.cpu().numpy().flatten()
         except Exception as e:
-            print(f"이미지 처리 중 오류 발생 - {image_url}: {e}")
+            logging.info(f"이미지 처리 중 오류 발생 - {image_url}: {e}")
             return None
 
     def encode_text(self, text):
@@ -52,5 +54,5 @@ class Encoding:
             return text_features.cpu().numpy().flatten()
         
         except Exception as e:
-            print(f"텍스트 처리 중 오류 발생: {e}")
+            logging.info(f"텍스트 처리 중 오류 발생: {e}")
             return None

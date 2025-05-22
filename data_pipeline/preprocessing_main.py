@@ -5,6 +5,7 @@ from preprocessing.filter_util import get_season_category_map
 
 import os 
 from dotenv import load_dotenv 
+import logging
 
 load_dotenv()
 
@@ -33,7 +34,7 @@ def main():
         s3_key=os.getenv("COMBINED")
     )
     
-    print("전처리 업로드 완료")
+    logging.info("전처리 업로드 완료")
 
 if __name__ == "__main__":
     main()

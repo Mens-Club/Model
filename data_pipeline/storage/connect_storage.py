@@ -3,6 +3,7 @@ import json
 import os
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
 
@@ -32,9 +33,9 @@ def upload_to_s3(data, bucket_name, s3_key, content_type="application/json"):
             Body=data,
             ContentType=content_type
         )
-        print(f"업로드 완료: s3://{bucket_name}/{s3_key}")
+        logging.info(f"업로드 완료: s3://{bucket_name}/{s3_key}")
     except ClientError as e:
-        print(f"업로드 실패: {e}")
+        logging.info(f"업로드 실패: {e}")
 
 def load_json_from_s3(bucket_name: str, s3_key: str) -> dict:
     
@@ -48,12 +49,12 @@ def load_json_from_s3(bucket_name: str, s3_key: str) -> dict:
         content = response['Body'].read().decode('utf-8')
         data = json.loads(content)
         
-        print(f"S3 JSON 로드 완료: s3://{bucket_name}/{s3_key}")
+        logging.info(f"S3 JSON 로드 완료: s3://{bucket_name}/{s3_key}")
         
         return data
     
     except ClientError as e:
         
-        print(f"S3에서 JSON 로드 실패: {e}")
+        logging.info(f"S3에서 JSON 로드 실패: {e}")
         
         return {}

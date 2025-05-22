@@ -1,7 +1,7 @@
 from database.connect_to_database import fetch_data_as_pandas
 from preprocessing.filter_util import recommend_by_filter
 import random 
-
+import logging
 
 # Llama3.2-vision 학습을 위한 instruction 매핑 
 
@@ -79,7 +79,7 @@ def generate_instruction_dataset_from_maintable(filter_json: dict, clothing_quer
                 all_samples.append(sample)
                 
         except Exception as e:
-            print(f"의류 실패 사유 :  {row} - {e}")
+            logging.info(f"의류 실패 사유 :  {row} - {e}")
 
     # 신발 (main_category 없음 → category는 고정)
     for _, row in df_shoes.iterrows():
@@ -97,7 +97,7 @@ def generate_instruction_dataset_from_maintable(filter_json: dict, clothing_quer
                 )
                 all_samples.append(sample)
         except Exception as e:
-            print(f"신발 실패 사유 : {row} - {e}")
+            logging.info(f"신발 실패 사유 : {row} - {e}")
 
     return all_samples
 

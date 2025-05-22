@@ -71,7 +71,7 @@ def get_season_category_map(
             if sub_category not in season_category_map[season][category]:
                 season_category_map[season][category].append(sub_category)
 
-    # ✅ S3로 저장
+    # S3로 저장
     if s3_bucket and s3_key:
         upload_to_s3(season_category_map, s3_bucket, s3_key)
 

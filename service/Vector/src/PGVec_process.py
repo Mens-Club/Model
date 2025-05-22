@@ -1,6 +1,8 @@
 import psycopg2
 import json
 import numpy as np
+import logging
+import traceback
 
 class PGVecProcess:
     
@@ -27,7 +29,7 @@ class PGVecProcess:
             self.conn = psycopg2.connect(**self.params)
             return self.conn.cursor()
         except Exception as e:
-            print(f"데이터베이스 연결 중 오류 발생: {e}")
+            logging.info(f"데이터베이스 연결 중 오류 발생: {e}")
             return None
     
     def close(self):
@@ -100,7 +102,7 @@ class PGVecProcess:
             # 오류 발생 시 롤백
             if self.conn:
                 self.conn.rollback()
-            print(f"데이터 삽입 중 오류 발생: {e}")
+            logging.info(f"데이터 삽입 중 오류 발생: {e}")
             return False
             
     def similarity_search(self, embedding, cursor, top_k=5):
@@ -172,6 +174,5 @@ class PGVecProcess:
         
         except Exception as e:
             print(f"유사도 검색 중 오류 발생: {e}")
-            import traceback
             traceback.print_exc()  # 자세한 오류 추적
             return []

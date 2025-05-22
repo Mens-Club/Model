@@ -5,6 +5,7 @@ import requests
 from .connect_storage import upload_to_s3
 from typing import List
 import pandas as pd
+import logging
 
 
 # 추후 리팩토링 예정
@@ -43,10 +44,10 @@ def upload_to_image(data: pd.DataFrame, bucket_name: str, folder: str) -> List[s
                 content_type="image/jpeg"
             )
 
-            print(f"✅ [{idx}] 업로드 성공: s3://{bucket_name}/{s3_key}")
+            logging.info(f"✅ [{idx}] 업로드 성공: s3://{bucket_name}/{s3_key}")
             uploaded_keys.append(s3_key)
 
         except Exception as e:
-            print(f"❌ [{idx}] 업로드 실패: {e}")
+            logging.info(f"❌ [{idx}] 업로드 실패: {e}")
 
     return uploaded_keys

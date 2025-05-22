@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from datasets import Dataset, Image, load_from_disk, concatenate_datasets
 from storage.connect_storage import get_client
 
+import logging
 
 load_dotenv()
 
@@ -41,10 +42,10 @@ def save_dataset_chunk(samples: list, start_idx: int, chunk_size: int):
             answers.append(sample["output"]["answer"])
             recommends.append(sample["output"]["recommend"])
         except Exception as e:
-            print(f"실패: {sample['input']['image']} - {e}")
+            logging.info(f"실패: {sample['input']['image']} - {e}")
 
     if len(images) == 0:
-        print(f" 이미지 없음: {start_idx}")
+        logging.info(f" 이미지 없음: {start_idx}")
         return
 
     dataset = Dataset.from_dict({
@@ -60,7 +61,7 @@ def save_dataset_chunk(samples: list, start_idx: int, chunk_size: int):
 
     save_path = f"fashion_dataset_part_{start_idx}"
     dataset.save_to_disk(save_path)
-    print(f"저장 완료: {save_path}")
+    logging.info(f"저장 완료: {save_path}")
 
 
 def chunked(data, size):
@@ -78,7 +79,7 @@ def merge_all_chunks(output_path: str, total: int, chunk_size: int):
 
     merged = concatenate_datasets(datasets)
     merged.save_to_disk(output_path)
-    print(f"🎉 전체 데이터셋 저장 완료: {output_path}")
+    logging.info(f"전체 데이터셋 저장 완료: {output_path}")
 
 def normalize_recommend_field(r):
     def safe(v):
@@ -100,7 +101,7 @@ def fix_recommend_and_save(part_path):
 
     ds_fixed = ds.map(fix)
     ds_fixed.save_to_disk(part_path)
-    print(f"✅ recommend 필드 수정 완료: {part_path}")
+    logging.info(f"✅ recommend 필드 수정 완료: {part_path}")
 
 
 def normalize_recommend_field(r):
@@ -129,7 +130,7 @@ def fix_recommend_and_save(part_path):
     shutil.rmtree(part_path)
     shutil.move(tmp_path, part_path)
 
-    print(f"recommend 정제 완료: {part_path}")
+    logging.info(f"recommend 정제 완료: {part_path}")
 
 
 def merge_all_parts(output_path: str, total: int, chunk_size: int):
@@ -142,7 +143,7 @@ def merge_all_parts(output_path: str, total: int, chunk_size: int):
 
     full_dataset = concatenate_datasets(datasets)
     full_dataset.save_to_disk(output_path)
-    print(f"🎉 전체 데이터셋 병합 완료: {output_path}")
+    logging.info(f"🎉 전체 데이터셋 병합 완료: {output_path}")
 
 def main():
     # 환경변수에서 읽기
@@ -151,9 +152,9 @@ def main():
     json_local = "instruction_dataset.json"
 
     # 1. JSON 다운로드
-    print(" instruction JSON 다운로드 중...")
+    logging.info(" instruction JSON 다운로드 중...")
     samples = download_instruction_json(bucket, s3_key, json_local)
-    print(f"총 샘플 수: {len(samples)}")
+    logging.info(f"총 샘플 수: {len(samples)}")
 
     # 2. 분할 저장
     save_all_chunks(samples, chunk_size=1000)
@@ -163,11 +164,11 @@ def main():
 
 def zip_and_upload(local_dir: str, zip_path: str, bucket: str, s3_key: str):
     shutil.make_archive(zip_path, 'zip', local_dir)
-    print(f"압축 완료: {zip_path}.zip")
+    logging.info(f"압축 완료: {zip_path}.zip")
 
     with open(f"{zip_path}.zip", "rb") as f:
         s3_client.upload_fileobj(f, bucket, s3_key)
-    print(f"S3 업로드 완료: s3://{bucket}/{s3_key}")
+    logging.info(f"S3 업로드 완료: s3://{bucket}/{s3_key}")
 
 
 if __name__ == "__main__":
