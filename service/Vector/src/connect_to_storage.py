@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 def get_client():
     return boto3.client(
         service_name=os.getenv("SERVICE_NAME"),
